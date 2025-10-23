@@ -1,0 +1,310 @@
+/* body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  color: white;
+} */
+ 
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f0f0f0;
+}
+/* Утилиты */
+.container {
+  max-width: 1640px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.gradient__text {
+  background: linear-gradient(to bottom, #BC10D8, #5000FAED);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+}
+
+/* .control-btn {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: #f8f8f8;
+  color: #333;
+  padding: 6px 12px;
+  margin: 0 5px;
+} */
+
+
+.link {
+  position: relative;
+  top: 100px;
+  text-decoration: none;
+  color: black;
+  padding: 1px 10%;
+  border: 1px solid;
+}
+.back {
+  text-decoration: none;
+  color: black;
+  border: 1px solid;
+  padding: 1px 10px;
+}
+.Exp {
+  font-weight: 100;
+}
+.backGround {
+  pointer-events: none;
+}
+.Texts {
+  background-color: antiquewhite;
+  color: rgb(166, 150, 255);
+  transform: translateX(-50%, -50%);
+}
+.flexbox_container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+
+
+
+
+
+
+/* Новый css */
+.menu {
+  background-image: url("assets/sprites/background_menu.png");
+  background-size: cover; /* добавить чтобы изображение заполнило фон */
+}
+.menu__container {
+  min-height: 100vh;
+  margin-bottom: 5px;
+}
+.menu-buttons {
+ padding-top: 10vh;
+ margin-left: auto;
+ margin-right: 25vh;
+ max-width: 300px;
+}
+.menu__btn {  
+  /* Настройка (фикс) ширины */
+  max-width: 300px;
+
+  /* Стилиризация элемента */
+  color: black;
+  border: 1px solid black;
+  text-decoration: none;
+  padding: 1vh 0;
+  font-weight: 625;
+  font-size: 20px;
+
+  display: block;
+  margin-bottom: 10px;
+  /* Центрирование символов элемента */
+  text-align: center;
+}
+
+/* Пока необъязательно  */
+/* .menu__btn--active { */
+ /* animation: swap linear ease-in;   */
+/* } */
+
+
+.disclaimers {
+ color: #eb0052;
+ text-align: center;
+ padding-bottom: 10px;
+ font-weight: 625;
+}
+
+.social__logo {
+  border: 1px solid #eb0052;
+  width: 65px;
+  height: 65px;
+  padding: 5px;
+  border-radius: 50%;
+}
+
+.github {
+  width: 75px;
+  height: 75px;
+}
+.discord {
+  border: 1px solid rgb(170, 170, 170);
+}
+.nav__social-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+/* Анимации кнопок */
+.is__active {
+  animation: slideIn 1s ease-out forwards;
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-10%);
+  }
+}
+.not__active {
+  animation: slideInOut 1s ease-out forwards;
+}
+@keyframes slideInOut {
+  from {
+    transform: translateX(-10%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+/* Стили персонажей - сохранены ваши оригинальные цвета */
+.character-kazuma {
+  color: rgb(0, 128, 43);
+  border: 1px solid rgb(0, 128, 43);
+}
+
+.character-aqua {
+  color: #00aaaa;
+  border: 1px solid #00aaaa;
+}
+
+.character-megumin {
+  color: red;
+  border: 1px solid red;
+}
+
+.character-darkness {
+  color: #cc9900;
+  border: 1px solid #cc9900;
+}
+
+.character-wiz {
+  color: purple;
+  border: 1px solid purple;
+}
+.character-yunyun {
+  color: rgb(128, 0, 0);
+  border: 1px solid;
+}
+.character-unknown {
+  color: #333;
+  border: 1px solid #333;
+  font-weight: 600;
+}
+
+.character-name {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 3vh;
+  max-width: fit-content;
+  margin-bottom: 15px;
+  margin-left: 2.5vh;
+}
+
+
+/* !!!!!!!!!!!!!!!!!НЕДОРАБОТАННО!!!!!!!!!!!!!!!! */
+/* Работа с интерфейсом новеллы */
+
+.novel-container {
+  /* Отступы */
+  padding: 0 1vh;
+  margin: 0 auto;
+  position: relative;
+
+  /* Для того чтобы не добавлялся контент */
+  overflow: hidden;
+ 
+  /* Настройка высоты */
+  min-height: 100vh;
+
+  /* Стилиризация */
+
+  border: 2px solid #ccc;
+  /* border-radius: 5px; */
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+}
+
+.interface {
+ padding-top: 70vh;
+}
+
+.dialogue-box {
+  padding: 1vh 2vh;
+  min-height: 20vh;
+  border: 1px solid;
+  border-radius: 20px;
+  background-color: #ccc;
+}
+.dialogue-text {
+  font-size: 16px;
+  line-height: 1.6;
+  font-size: 26px;
+}
+
+
+
+.controls {
+  position: absolute;
+  right: 10vh;
+  display: flex;
+  gap: 10px;
+  text-align: center;
+}
+
+.control-btn {
+  cursor: pointer;
+  text-decoration: none;
+  padding: 5px 10px;
+  
+  /* Стилиризация */
+  color: black;
+  border: 1px solid #ccc;
+  font-size: 3vh;
+}
+.menu-btn {
+  text-decoration: none;
+}
+
+
+
+
+
+/* Работа со спрайтами */
+/* .character__sprite {
+  Задаём базовую позицию
+  position: absolute;
+  transform: translateX(-150%);
+
+  Стилиризация
+  z-index: -1;
+  width: 300px;
+  height: 300px;
+} */
+
+.character__sprite {
+  position: absolute;
+  transition: all 0.5s ease-in-out;
+  width: 300px;
+  height: 300px;
+}
+
+.character--active {
+  opacity: 1;
+  transform: translate(var(--pos-x), var(--pos-y));
+}
+
+.character--hidden {
+  opacity: 0;
+  transform: translate(var(--posPas-x), var(--posPas-y));
+}
+.confirm__action-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
