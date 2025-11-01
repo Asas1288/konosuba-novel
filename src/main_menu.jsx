@@ -91,6 +91,9 @@ const MainMenu = () => {
               <Link onMouseEnter={() => handleMouseEnter('options')} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === 'options' ? 'is__active' : 'not__active'}`} to="/settings">
                 Настройки
               </Link>
+              <Link onMouseEnter={() => handleMouseEnter('news')} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === 'news' ? 'is__active' : 'not__active'}`} to="/news">
+               Новости VK
+              </Link>
             </nav>
           </div>
         </section>

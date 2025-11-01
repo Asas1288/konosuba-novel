@@ -13,13 +13,14 @@ import ApiComponent from './data';
 import Credits from './authors';
 import Confirm from './confirm';
 import Settings from './settings';
-
+import News from './news';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Confirm />} /> 
+        <Route path="/" element={<Confirm />} />
+        <Route path="/news" element={<News />} />
         <Route path="/main-menu" element={<MainMenu />} />
         <Route path="/nowell" element={<Nowell />} />
         <Route path="/party" element={<ApiComponent />}/>

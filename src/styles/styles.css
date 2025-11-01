@@ -308,3 +308,7 @@ body {
   align-items: center;
   min-height: 100vh;
 }
+.background-news {
+  min-height: 100vh;
+  background-color: black;
+}
