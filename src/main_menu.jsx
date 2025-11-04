@@ -9,7 +9,7 @@ import music3 from "./styles/assets/sounds/music3.mp3";
 const MainMenu = () => {
 
   // Нужна починка произведения аудио дорожки
-  const [currentIndex, setCurrentIndex] = useState(0); // ДОБАВЬ ЭТУ СТРОЧКУ!
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [activeButton, setActiveButton] = useState(null);
   const [audio, setAudio] = useState(null);
   // const audioRef = useRef(null);
@@ -82,11 +82,11 @@ const MainMenu = () => {
               <Link onMouseEnter={() => handleMouseEnter('new-game')} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === 'new-game' ? 'is__active' : 'not__active'}`} to="/nowell">
                 Новая игра
               </Link>
+              {/* <Link onMouseEnter={() => handleMouseEnter('quickly-load')} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === 'quickly-load' ? 'is__active' : 'not__active'}`} to="/">
+                Быстрая загрузка (В работах)
+              </Link> */}
               <Link onMouseEnter={() => handleMouseEnter('authors')} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === 'authors' ? 'is__active' : 'not__active'}`} to="/credits">
                 Авторы
-              </Link>
-              <Link onMouseEnter={() => handleMouseEnter('servers')} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === 'servers' ? 'is__active' : 'not__active'}`} to="/party">
-                Сервера (Бета)
               </Link>
               <Link onMouseEnter={() => handleMouseEnter('options')} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === 'options' ? 'is__active' : 'not__active'}`} to="/settings">
                 Настройки
@@ -110,7 +110,7 @@ const MainMenu = () => {
       <footer className="contacts">
         <div className="container nav__social-box">
           <a href="https://github.com/Asas1288" className="img__link-item">
-            <img src={githubLogo} alt="" className="social__logo" />
+            <img src={githubLogo} alt="" className="social__logo vk" />
           </a>
           <a href="https://github.com/Asas1288" className="img__link-item">
             <img src={githubLogo} alt="" className="social__logo github" />
