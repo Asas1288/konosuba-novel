@@ -54,20 +54,20 @@ const SCENES = [
   { character: "Аква", text: "Аййййййй!" },
 ];
 
-const Nowell = () => {
 
-// const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
-  const [autoPlayMode, setAutoPlayMode] = useState(false);
-  const [autoSkipMode, setAutoSkipMode] = useState(false);
-  const intervalRef = useRef(null);
+
+const Nowell = () => {
+// Для сохранения интервалов между рендером.
   const intervalRefTS = useRef(null);
 
 
+
+  
 // Данными удобно управлять, но вызывает перерендер, нужно переделать под useReducer, В ПРОЦЕССЕ ИЗУЧЕНИЯ/ВЫПОЛНЕНИЯ
   const [game, setGame] = useState({
     curSceneInx: 0,
-    autoPlayModeNTRD: false, // Не готово
-    autoSkipModeNTRD: false // Не готово
+    autoPlayModeNTRD: false, 
+    autoSkipModeNTRD: false
   });
 
 
@@ -75,15 +75,18 @@ const Nowell = () => {
 
 // Функция перехода на другую сцену
   const goToNextScene = () => {
-    if (game.curSceneInx <= SCENES.length - 2) {
+    if (game.curSceneInx < SCENES.length - 1) {
       setGame((prev) => ({
   ...prev,
   curSceneInx: prev.curSceneInx + 1
   })
 );
     } else {
-      setAutoPlayMode(false);
-      setAutoSkipMode(false);
+      setGame((prev) => ({
+        ...prev,
+        autoPlayModeNTRD: false,
+        autoSkipModeNTRD: false
+      }))
     }
   };
 
@@ -91,17 +94,17 @@ const Nowell = () => {
 
 
 // Звуки
-  useEffect(() => {
-    let audio;
-    if (currentScene.sound) {
-      audio = new Audio(currentScene.sound);
-      audio.volume = 0.1;
-      audio.play();
-    }
-    return () => {
-      if (audio) audio.pause();
-    };
-  }, [game.curSceneInx]);
+  // useEffect(() => {
+  //   let audio;
+  //   if (currentScene.sound) {
+  //     audio = new Audio(currentScene.sound);
+  //     audio.volume = 0.1;
+  //     audio.play();
+  //   }
+  //   return () => {
+  //     if (audio) audio.pause();
+  //   };
+  // }, [game.curSceneInx]);
 
 
 
@@ -114,26 +117,33 @@ const Nowell = () => {
 
 
 
+
+
+
   // Авто-плей функция
   useEffect(() => {
-    if (autoPlayMode) {
-      intervalRef.current = setInterval(() => {
+    if (game.autoPlayModeNTRD) {
+      intervalRefTS.current = setInterval(() => {
         goToNextScene();
       }, 1500);
     } else {
-      
-      clearInterval(intervalRef.current);
+      clearInterval(intervalRefTS.current);
     }
 
-    return () => clearInterval(intervalRef.current);
-  }, [autoPlayMode, game.curSceneInx]);
+    return () => clearInterval(intervalRefTS.current);
+  }, [game.autoPlayModeNTRD, game.curSceneInx]);
+
+
+
+
+
 
 
 
 
 // Функция авто-скипа
   useEffect(() => {
-    if (autoSkipMode) {
+    if (game.autoSkipModeNTRD) {
       intervalRefTS.current = setInterval(() => {
         goToNextScene();
       }, 200);
@@ -141,23 +151,10 @@ const Nowell = () => {
       clearInterval(intervalRefTS.current);
     }
 
+    // Функция очистки
     return () => clearInterval(intervalRefTS.current);
-  }, [autoSkipMode, game.curSceneInx]);
+  }, [game.autoSkipModeNTRD, game.curSceneInx]); // Замена на новые зависимости, небольшой рефакторинг
 
-
-
-
-
-
-// Функция перехода на другую сцену (Устаревшая)
-  // const goToNextScene = () => {
-  //   if (currentSceneIndex < SCENES.length - 1) {
-  //     setCurrentSceneIndex((prev) => prev + 1);
-  //   } else {
-  //     setAutoPlayMode(false);
-  //     setAutoSkipMode(false);
-  //   }
-  // };
 
 
 
@@ -165,11 +162,17 @@ const Nowell = () => {
 
 // Авто-скип мод
   const handleSkip = () => {
-    if (autoSkipMode) {
-      setAutoSkipMode(false);
+    if (game.autoSkipModeNTRD) {
+      setGame((prev) => ({
+        ...prev,
+        autoSkipModeNTRD: false
+      }))
     } else {
-      setAutoPlayMode(false);
-      setAutoSkipMode(true);
+      setGame((prev) => ({
+        ...prev,
+        autoSkipModeNTRD: true,
+        autoPlayModeNTRD: false
+      }))
     }
   };
 
@@ -178,13 +181,20 @@ const Nowell = () => {
 
 // Авто-плей мод
   const handleAutoPlay = () => {
-    if (autoPlayMode) {
-      setAutoPlayMode(false);
+     if (game.autoPlayModeNTRD) {
+      setGame((prev) => ({
+        ...prev,
+        autoPlayModeNTRD: false
+      }))
     } else {
-      setAutoSkipMode(false);
-      setAutoPlayMode(true);
+      setGame((prev) => ({
+        ...prev,
+        autoPlayModeNTRD: true,
+        autoSkipModeNTRD: false
+      }))
     }
   };
+
 
 
 
@@ -213,7 +223,7 @@ const Nowell = () => {
 
 
 
-
+// Пока можно забыть про useReducer, он пока не нужен.
 // Работа с useReducer, практика и проба:
 
 // const initialState = {
@@ -230,53 +240,58 @@ const Nowell = () => {
 
 
 
+const CHARACTERS = [
+  { key: 'K', src: kazuma, alt: 'Казума'},
+  { key: 'M', src: megumin, alt: 'Мегумин'},
+  { key: 'D', src: darkness, alt: 'Даркнесс'},
+  { key: 'A', src: aqua, alt: 'Аква'}
+];
+
+
+
+// const getCharacterInScenePosition = (charData) => {
+// if (!charData) return null;
+
+
+// return {
+//   '--pos-x': charData.x,
+//   '--pos-y': charData.y
+//  }
+// };
+
+
+
 
   return (
     // novel-container --> onClick={goToNextScene}
-    <div className="novel-container" >
-      {/* Кнопки с опассити-появлением + анимация */}
-        <img src={kazuma} alt="" className={`character__sprite ${currentScene.charInScene?.K?.y ? 'character--active' : 'character--hidden'}`} style={{
-          '--pos-x': currentScene.charInScene?.K?.x + '%',
-          '--pos-y': currentScene.charInScene?.K?.y + '%',
-          '--posPas-x': currentScene.charInScene?.K?.pasX + '%',
-          '--posPas-y': currentScene.charInScene?.K?.pasY + '%',
-        }} />
-        <img src={darkness} alt="" className={`character__sprite ${currentScene.charInScene?.D?.y ? 'character--active' : 'character--hidden'}`} style={{
-          '--pos-x': currentScene.charInScene?.D?.x + '%',
-          '--pos-y': currentScene.charInScene?.D?.y + '%',
-          '--posPas-x': currentScene.charInScene?.D?.pasX + '%',
-          '--posPas-y': currentScene.charInScene?.D?.pasY + '%',
-        }} />
-        <img src={aqua} alt="" className={`character__sprite ${currentScene.charInScene?.A?.y ? 'character--active' : 'character--hidden'}`} style={{
-          '--pos-x': currentScene.charInScene?.A?.x + '%',
-          '--pos-y': currentScene.charInScene?.A?.y + '%',
-          '--posPas-x': currentScene.charInScene?.A?.pasX + '%',
-          '--posPas-y': currentScene.charInScene?.A?.pasY + '%',
-        }} />
-        <img src={megumin} alt="" className={`character__sprite ${currentScene.charInScene?.M?.y ? 'character--active' : 'character--hidden'}`} style={{
-          '--pos-x': currentScene.charInScene?.M?.x + '%',
-          '--pos-y': currentScene.charInScene?.M?.y + '%',
-          '--posPas-x': currentScene.charInScene?.M?.pasX + '%',
-          '--posPas-y': currentScene.charInScene?.M?.pasY + '%',
-        }} />
+    <div className="novel-container" onClick={goToNextScene}>
+
+
+    {/* {CHARACTERS.map(char => {
+      <img 
+      key={char.key}
+      src={char.src}
+      alt={char.alt}
+      className={`character__sprite ${currentScene.charInScene?.[char.key] ? 'character--active' : 'character--hidden'}`}
+      style={getCharacterInScenePosition(currentScene.charInScene?.[char.key])}
+      />
+    })} */}
+
+
       <div className="interface">
         <div className="controls">
-          <button onClick={goToNextScene} className="control-btn">
-            Далее
-          </button>
-
           <button
             onClick={handleAutoPlay}
-            className={`control-btn ${autoPlayMode ? "active" : ""}`}
+            className={`control-btn ${game.autoPlayModeNTRD ? "active" : ""}`}
           >
-            {autoPlayMode ? "Стоп" : "Авто"}
+            {game.autoPlayModeNTRD ? "Стоп" : "Авто"}
           </button>
 
           <button
             onClick={handleSkip}
-            className={`control-btn ${autoSkipMode ? "active" : ""}`}
+            className={`control-btn ${game.autoSkipModeNTRD ? "active" : ""}`}
           >
-            {autoSkipMode ? "Стоп" : "Скип"}
+            {game.autoSkipModeNTRD ? "Стоп" : "Скип"}
           </button>
 
           <Link to="/main-menu" className="control-btn menu-btn">

@@ -293,6 +293,9 @@ body {
   height: 300px;
 }
 
+
+
+
 .character--active {
   opacity: 1;
   transform: translate(var(--pos-x), var(--pos-y));
@@ -302,6 +305,11 @@ body {
   opacity: 0;
   transform: translate(var(--posPas-x), var(--posPas-y));
 }
+
+
+
+
+
 .confirm__action-box {
   display: flex;
   justify-content: center;
