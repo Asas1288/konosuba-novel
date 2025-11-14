@@ -7,52 +7,76 @@ import darkness from "./styles/assets/sprites/darkness.png";
 import aqua from "./styles/assets/sprites/aqua.png";
 import megumin from "./styles/assets/sprites/megumin.png";
 
+// Импорт сцен
+import { SCENES } from "./scenes";
 
 
+// Проверка SCENES
+console.log(SCENES);
+
+
+
+
+
+
+// Старый массив
 // Персонажи - K-Казума, D-Даркнесс, А-аква, M-Мегумин (Латинскими буквами!)
-const SCENES = [
-  { character: "Казума", text: "Эй, Аква!", charInScene: { 'K': { x: 150, y: 100 }, 'A': { x: 400, y: 100 } } },
-  { character: "Аква", text: "Да, Казума?", sound: "/sounds/yesKazuma.mp3", charInScene: { 'K': { x: 200, y: 100 }, 'A': { x: 400, y: 100 } } },
-  {
-    character: "Казума",
-    text: "Что ты делаешь???",
-    charInScene: { 'K': { x: 250, y: 100 }, 'A': { x: 400, y: 100 } },
-  },
-  {
-    character: "Аква",
-    text: "Ничего такого...",
-    sound: "/sounds/uraAqua2.mp3",
-    charInScene: { 'K': { x: 300, y: 100 }, 'A': { x: 400, y: 100 } },
-  },
-  { character: "Казума", text: "БЕСПОЛЕЗНОГИНЯ!!!", },
-  { character: "Аква", text: "ЙЕЕААААААААААХХХХХХХ!!!" },
-  { character: "Аква", text: "ТЫ ЧТО ДЕЛАЕШЬ ХИККИ-ЗАДРОТ???" },
-  { character: "Даркнесс", text: "Эй, казума..." },
-  { character: "Даркнесс", text: "О боже..." },
-  {
-    character: "Мегумин",
-    text: "Даркнесс, Даркнесс, ты не предстовля...",
-  },
-  { character: "Мегумин", text: "Эмм... что здесь происходит?" },
-  { character: "Даркнесс", text: "Этот балбес начал щикотать Акву..." },
-  {
-    character: "Казума",
-    text: "А какого чёрта, эта бесполезность опять пыталась сжечь мою спортивку!?",
-  },
-  {
-    character: "Казума",
-    text: "(Кто-то прервал наш повседневный конфликт криком из-вне особняка.)",
-  },
-  { character: "???", text: "Казума-сан!!!!" },
-  {
-    character: "Казума",
-    text: "(Оххх, как же не узнать этот миленький голос...)",
-  },
-  { character: "Виз", text: "Казума-сан!!!" },
-  { character: "Казума", text: "(Аква рванула на опережение.)" },
-  { character: "Казума", text: "А НУ СТОЯТЬ БЕСПОЛЕЗНОСТЬ!" },
-  { character: "Аква", text: "Аййййййй!" },
-];
+// const scenes = [
+//   { character: "Казума", text: "Эй, Аква!", charInScene: { 'K': { x: 150, y: 100 }, 'A': { x: 400, y: 100 } } },
+//   { character: "Аква", text: "Да, Казума?", sound: "/sounds/yesKazuma.mp3", charInScene: { 'K': { x: 200, y: 100 }, 'A': { x: 400, y: 100 } } },
+//   {
+//     character: "Казума",
+//     text: "Что ты делаешь???",
+//     charInScene: { 'K': { x: 250, y: 100 }, 'A': { x: 400, y: 100 } },
+//   },
+//   {
+//     character: "Аква",
+//     text: "Ничего такого...",
+//     sound: "/sounds/uraAqua2.mp3",
+//     charInScene: { 'K': { x: 300, y: 100 }, 'A': { x: 400, y: 100 } },
+//   },
+//   { character: "Казума", text: "БЕСПОЛЕЗНОГИНЯ!!!", },
+//   { character: "Аква", text: "ЙЕЕААААААААААХХХХХХХ!!!" },
+//   { character: "Аква", text: "ТЫ ЧТО ДЕЛАЕШЬ ХИККИ-ЗАДРОТ???" },
+//   { character: "Даркнесс", text: "Эй, казума..." },
+//   { character: "Даркнесс", text: "О боже..." },
+//   {
+//     character: "Мегумин",
+//     text: "Даркнесс, Даркнесс, ты не предстовля...",
+//   },
+//   { character: "Мегумин", text: "Эмм... что здесь происходит?" },
+//   { character: "Даркнесс", text: "Этот балбес начал щикотать Акву..." },
+//   {
+//     character: "Казума",
+//     text: "А какого чёрта, эта бесполезность опять пыталась сжечь мою спортивку!?",
+//   },
+//   {
+//     character: "Казума",
+//     text: "(Кто-то прервал наш повседневный конфликт криком из-вне особняка.)",
+//   },
+//   { character: "???", text: "Казума-сан!!!!" },
+//   {
+//     character: "Казума",
+//     text: "(Оххх, как же не узнать этот миленький голос...)",
+//   },
+//   { character: "Виз", text: "Казума-сан!!!" },
+//   { character: "Казума", text: "(Аква рванула на опережение.)" },
+//   { character: "Казума", text: "А НУ СТОЯТЬ БЕСПОЛЕЗНОСТЬ!" },
+//   { character: "Аква", text: "Аййййййй!" },
+// ]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -65,30 +89,64 @@ const Nowell = () => {
   
 // Данными удобно управлять, но вызывает перерендер, нужно переделать под useReducer, В ПРОЦЕССЕ ИЗУЧЕНИЯ/ВЫПОЛНЕНИЯ
   const [game, setGame] = useState({
+    curSceneId: "start",
     curSceneInx: 0,
     autoPlayModeNTRD: false, 
-    autoSkipModeNTRD: false
+    autoSkipModeNTRD: false,
+    scenes: null
   });
 
 
 
 
+// Проверка сцены
+  // Создание новой функции перебора сцен
+const newCurrentScene = SCENES[game.curSceneId][game.curSceneInx] || {
+    character: "Конец",
+    text: "История завершена!",
+};
+
+console.log(newCurrentScene);
+
+
+
 // Функция перехода на другую сцену
-  const goToNextScene = () => {
-    if (game.curSceneInx < SCENES.length - 1) {
-      setGame((prev) => ({
-  ...prev,
-  curSceneInx: prev.curSceneInx + 1
-  })
-);
-    } else {
-      setGame((prev) => ({
-        ...prev,
-        autoPlayModeNTRD: false,
-        autoSkipModeNTRD: false
-      }))
-    }
-  };
+//   const goToNextScene = () => {
+//     if (game.curSceneInx < SCENES.length - 1) {
+//       setGame((prev) => ({
+//   ...prev,
+//   curSceneInx: prev.curSceneInx + 1
+//   })
+// );
+//     } else {
+//       setGame((prev) => ({
+//         ...prev,
+//         autoPlayModeNTRD: false,
+//         autoSkipModeNTRD: false
+//       }))
+//     }
+//   };
+
+
+
+
+
+// Новая функция перехода на другую сцену:
+const goToNextScene = () => {
+  if (game.curSceneInx < SCENES[game.curSceneId].length - 1) {
+   setGame((prev) => ({
+    ...prev,
+    curSceneInx: prev.curSceneInx + 1
+   }));
+  } else {
+    setGame((prev) => ({
+      ...prev,
+      autoPlayModeNTRD: false,
+      autoSkipModeNTRD: false
+    }))
+  }
+}
+
 
 
 
@@ -105,15 +163,6 @@ const Nowell = () => {
   //     if (audio) audio.pause();
   //   };
   // }, [game.curSceneInx]);
-
-
-
-
-// Проверка сцены
-  const currentScene = SCENES[game.curSceneInx] || {
-    character: "Конец",
-    text: "История завершена!",
-  };
 
 
 
@@ -200,9 +249,9 @@ const Nowell = () => {
 
 //  Динамичная проверка классов персонажа
   const getCharacterColorClass = () => {
-    if (!currentScene || !currentScene.character) return "character-unknown";
+    if (!newCurrentScene || !newCurrentScene.character) return "character-unknown";
 
-    switch (currentScene.character) {
+    switch (newCurrentScene.character) {
       case "Казума":
         return "character-kazuma";
       case "Аква":
@@ -262,6 +311,19 @@ const CHARACTERS = [
 
 
 
+
+const setNewScene = (next_branch) => {
+ setGame((prev) => ({
+  ...prev,
+  curSceneId: next_branch,
+  curSceneInx: 0
+ }))
+}
+
+
+
+
+
   return (
     // novel-container --> onClick={goToNextScene}
     <div className="novel-container" onClick={goToNextScene}>
@@ -279,6 +341,11 @@ const CHARACTERS = [
 
 
       <div className="interface">
+        <div className="choices">
+          {newCurrentScene.choices?.map(choice => (
+           <button key={choice.next} onClick={() => setNewScene(choice.next, choice.nextInx)}>{choice.text}</button>
+          ))}
+        </div>
         <div className="controls">
           <button
             onClick={handleAutoPlay}
@@ -299,10 +366,10 @@ const CHARACTERS = [
           </Link>
         </div>
         <div className={`character-name ${getCharacterColorClass()}`}>
-          {currentScene.character}
+          {newCurrentScene.character}
         </div>
         <div className="dialogue-box">
-          <p className="dialogue-text">{currentScene.text}</p>
+          <p className="dialogue-text">{newCurrentScene.text}</p>
         </div>
       </div>
     </div>
