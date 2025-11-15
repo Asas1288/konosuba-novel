@@ -11,77 +11,10 @@ import megumin from "./styles/assets/sprites/megumin.png";
 import { SCENES } from "./scenes";
 
 
-// Проверка SCENES
-console.log(SCENES);
-
-
-
-
-
-
-// Старый массив
-// Персонажи - K-Казума, D-Даркнесс, А-аква, M-Мегумин (Латинскими буквами!)
-// const scenes = [
-//   { character: "Казума", text: "Эй, Аква!", charInScene: { 'K': { x: 150, y: 100 }, 'A': { x: 400, y: 100 } } },
-//   { character: "Аква", text: "Да, Казума?", sound: "/sounds/yesKazuma.mp3", charInScene: { 'K': { x: 200, y: 100 }, 'A': { x: 400, y: 100 } } },
-//   {
-//     character: "Казума",
-//     text: "Что ты делаешь???",
-//     charInScene: { 'K': { x: 250, y: 100 }, 'A': { x: 400, y: 100 } },
-//   },
-//   {
-//     character: "Аква",
-//     text: "Ничего такого...",
-//     sound: "/sounds/uraAqua2.mp3",
-//     charInScene: { 'K': { x: 300, y: 100 }, 'A': { x: 400, y: 100 } },
-//   },
-//   { character: "Казума", text: "БЕСПОЛЕЗНОГИНЯ!!!", },
-//   { character: "Аква", text: "ЙЕЕААААААААААХХХХХХХ!!!" },
-//   { character: "Аква", text: "ТЫ ЧТО ДЕЛАЕШЬ ХИККИ-ЗАДРОТ???" },
-//   { character: "Даркнесс", text: "Эй, казума..." },
-//   { character: "Даркнесс", text: "О боже..." },
-//   {
-//     character: "Мегумин",
-//     text: "Даркнесс, Даркнесс, ты не предстовля...",
-//   },
-//   { character: "Мегумин", text: "Эмм... что здесь происходит?" },
-//   { character: "Даркнесс", text: "Этот балбес начал щикотать Акву..." },
-//   {
-//     character: "Казума",
-//     text: "А какого чёрта, эта бесполезность опять пыталась сжечь мою спортивку!?",
-//   },
-//   {
-//     character: "Казума",
-//     text: "(Кто-то прервал наш повседневный конфликт криком из-вне особняка.)",
-//   },
-//   { character: "???", text: "Казума-сан!!!!" },
-//   {
-//     character: "Казума",
-//     text: "(Оххх, как же не узнать этот миленький голос...)",
-//   },
-//   { character: "Виз", text: "Казума-сан!!!" },
-//   { character: "Казума", text: "(Аква рванула на опережение.)" },
-//   { character: "Казума", text: "А НУ СТОЯТЬ БЕСПОЛЕЗНОСТЬ!" },
-//   { character: "Аква", text: "Аййййййй!" },
-// ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const Nowell = () => {
 // Для сохранения интервалов между рендером.
+// Надо сделать чтобы всё управлялось одним ref(-ом), но пока так, честно устал дебажить это говно
   const intervalRefTS = useRef(null);
   const intervalRefTA = useRef(null);
 
@@ -89,26 +22,21 @@ const Nowell = () => {
   
 // Данными удобно управлять, но вызывает перерендер, нужно переделать под useReducer, В ПРОЦЕССЕ ИЗУЧЕНИЯ/ВЫПОЛНЕНИЯ
   const [game, setGame] = useState({
-    curSceneId: "start",
+    curBranch: "start",
     curSceneInx: 0,
     autoPlayModeNTRD: false, 
-    autoSkipModeNTRD: false,
-    scenes: null
+    autoSkipModeNTRD: false // Я забыл что такое NTRD, но я пока не буду переписывать новое имя, для autoPlayMode/autoSkipMode и т.д, займёт время для переписи функций.
   });
 
 
 
 
-// Проверка сцены
+// Проверка текущейсцены
   // Создание новой функции перебора сцен
-const newCurrentScene = SCENES[game.curSceneId][game.curSceneInx] || {
+const currentScene = SCENES[game.curBranch][game.curSceneInx] || {
     character: "Конец",
     text: "История завершена!",
 };
-
-
-// Чекаем данные
-console.log(newCurrentScene);
 
 
 
@@ -135,7 +63,7 @@ console.log(newCurrentScene);
 
 // Новая функция перехода на другую сцену:
 const goToNextScene = () => {
-  if (game.curSceneInx < SCENES[game.curSceneId].length - 1) {
+  if (game.curSceneInx < SCENES[game.curBranch].length - 1) {
    setGame((prev) => ({
     ...prev,
     curSceneInx: prev.curSceneInx + 1
@@ -152,7 +80,7 @@ const goToNextScene = () => {
 
 
 
-
+// Тоже может пригодиться
 // Звуки
   // useEffect(() => {
   //   let audio;
@@ -250,9 +178,9 @@ const goToNextScene = () => {
 
 //  Динамичная проверка классов персонажа
   const getCharacterColorClass = () => {
-    if (!newCurrentScene || !newCurrentScene.character) return "character-unknown";
+    if (!currentScene || !currentScene.character) return "character-unknown";
 
-    switch (newCurrentScene.character) {
+    switch (currentScene.character) {
       case "Казума":
         return "character-kazuma";
       case "Аква":
@@ -281,11 +209,7 @@ const goToNextScene = () => {
 //   inventory: ['Меч'],
 //   karma: 50
 // }
-
 // const [state, dispatch] = useReducer(gameReducer, initialState);
-// 
-
-
 
 
 
@@ -299,6 +223,7 @@ const CHARACTERS = [
 
 
 
+// Вероятно пригодится, пока не рефакторю, для получения данных о позиции персонажа в текущей сцене.
 // const getCharacterInScenePosition = (charData) => {
 // if (!charData) return null;
 
@@ -310,19 +235,13 @@ const CHARACTERS = [
 // };
 
 
-
-
-
-const setNewScenes = (next_branch) => {
+const updateScenes = (next_branch) => {
  setGame((prev) => ({
   ...prev,
-  curSceneId: next_branch,
+  curBranch: next_branch,
   curSceneInx: 0
  }))
 }
-
-
-
 
 
   return (
@@ -343,8 +262,8 @@ const setNewScenes = (next_branch) => {
 
       <div className="interface">
         <div className="choices">
-          {newCurrentScene.choices?.map(choice => (
-           <button key={choice.next} onClick={() => setNewScenes(choice.next, choice.nextInx)}>{choice.text}</button>
+          {currentScene.choices?.map(choice => (
+           <button key={choice.next} onClick={() => updateScenes(choice.next, choice.nextInx)} className={`choices__btn`}>{choice.text}</button>
           ))}
         </div>
         <div className="controls">
@@ -368,10 +287,10 @@ const setNewScenes = (next_branch) => {
           </Link>
         </div>
         <div className={`character-name ${getCharacterColorClass()}`}>
-          {newCurrentScene.character}
+          {currentScene.character}
         </div>
         <div className="dialogue-box">
-          <p className="dialogue-text">{newCurrentScene.text}</p>
+          <p className="dialogue-text">{currentScene.text}</p>
         </div>
       </div>
     </div>
