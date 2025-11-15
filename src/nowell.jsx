@@ -83,7 +83,7 @@ console.log(SCENES);
 const Nowell = () => {
 // Для сохранения интервалов между рендером.
   const intervalRefTS = useRef(null);
-
+  const intervalRefTA = useRef(null);
 
 
   
@@ -106,6 +106,8 @@ const newCurrentScene = SCENES[game.curSceneId][game.curSceneInx] || {
     text: "История завершена!",
 };
 
+
+// Чекаем данные
 console.log(newCurrentScene);
 
 
@@ -172,14 +174,14 @@ const goToNextScene = () => {
   // Авто-плей функция
   useEffect(() => {
     if (game.autoPlayModeNTRD) {
-      intervalRefTS.current = setInterval(() => {
+      intervalRefTA.current = setInterval(() => {
         goToNextScene();
       }, 1500);
     } else {
-      clearInterval(intervalRefTS.current);
+      clearInterval(intervalRefTA.current);
     }
 
-    return () => clearInterval(intervalRefTS.current);
+    return () => clearInterval(intervalRefTA.current);
   }, [game.autoPlayModeNTRD, game.curSceneInx]);
 
 
@@ -243,7 +245,6 @@ const goToNextScene = () => {
       }))
     }
   };
-
 
 
 
@@ -312,7 +313,7 @@ const CHARACTERS = [
 
 
 
-const setNewScene = (next_branch) => {
+const setNewScenes = (next_branch) => {
  setGame((prev) => ({
   ...prev,
   curSceneId: next_branch,
@@ -326,7 +327,7 @@ const setNewScene = (next_branch) => {
 
   return (
     // novel-container --> onClick={goToNextScene}
-    <div className="novel-container" onClick={goToNextScene}>
+    <div className="novel-container">
 
 
     {/* {CHARACTERS.map(char => {
@@ -343,10 +344,11 @@ const setNewScene = (next_branch) => {
       <div className="interface">
         <div className="choices">
           {newCurrentScene.choices?.map(choice => (
-           <button key={choice.next} onClick={() => setNewScene(choice.next, choice.nextInx)}>{choice.text}</button>
+           <button key={choice.next} onClick={() => setNewScenes(choice.next, choice.nextInx)}>{choice.text}</button>
           ))}
         </div>
         <div className="controls">
+          <button className={`control-btn`} onClick={goToNextScene}>Далее</button>
           <button
             onClick={handleAutoPlay}
             className={`control-btn ${game.autoPlayModeNTRD ? "active" : ""}`}
