@@ -110,7 +110,7 @@ const News = () => {
                                 fontStyle: "italic",
                             }}
                         >
-                            KonoSuba: Бесполезная Новелла [ FAN ]
+                            KonoSuba: Прекрасная Новелла [ FAN ]
                         </div>
                     </div>
                     <Link 
