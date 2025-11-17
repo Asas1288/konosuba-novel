@@ -42,7 +42,7 @@ const News = () => {
                         </div>
 
                         <p style={{ margin: "12px 0", opacity: 0.9 }}>
-                           Привет, пользователь! Это живая версия новеллы.
+                           Привет, пользователь! <br /> Это живая версия новеллы. <br />
 
                            Здесь всё обновляется в реальном времени:<br />
 - Новые сцены и диалоги <br />
@@ -121,7 +121,6 @@ const News = () => {
                             left: "50%",
                             transform: "translateX(-50%)",
                             display: "block",
-                            color: "black",
                             border: "1px solid black",
                             textDecoration: "none",
                             padding: "12px 30px",

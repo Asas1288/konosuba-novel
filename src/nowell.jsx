@@ -14,7 +14,7 @@ import { SCENES } from "./scenes";
 
 const Nowell = () => {
 // Для сохранения интервалов между рендером.
-// Надо сделать чтобы всё управлялось одним ref(-ом), но пока так, честно устал дебажить это говно
+// Вынести в 1 ref невозможно, потому что каждый из них хранит своё значение, отчитываемое в секундах до исполнения кода в useEffect 
   const intervalRefTS = useRef(null);
   const intervalRefTA = useRef(null);
 
@@ -242,6 +242,40 @@ const updateScenes = (next_branch) => {
   curSceneInx: 0
  }))
 }
+
+
+// Новый useEffect для звуков при смене сцены, рефактор потом, щас функция
+useEffect(() => {
+  if (!currentScene.sound) return;
+
+  let soundInstance;
+
+  const loadSound = async (soundName) => {
+  try {
+  const curSceneSound = await import(`./styles/assets/sounds/${soundName}.mp3`);
+  
+  soundInstance = new Audio(curSceneSound.default);
+  soundInstance.volume = 0.01;
+  await soundInstance.play();
+ }
+// Обычная обработка ошибки
+ catch(err) {
+  console.log(`Произошла ошибка: ${err}`)
+ }
+}
+
+loadSound(currentScene.sound);
+
+return () => {
+  if (soundInstance) {
+ soundInstance.pause();
+ soundInstance.currentTime = 0;
+  }
+}
+
+}, [game.curSceneInx]);
+
+
 
 
   return (

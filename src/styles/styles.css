@@ -15,12 +15,12 @@ body {
   padding: 0 10px;
 }
 
-.gradient__text {
+/* .gradient__text {
   background: linear-gradient(to bottom, #BC10D8, #5000FAED);
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-transform: uppercase;
-}
+} */
 
 /* .control-btn {
   border: 1px solid #aaa;
