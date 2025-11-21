@@ -31,7 +31,7 @@ const MainMenu = () => {
       const volume = JSON.parse(savedVolume).volumeVal;
 
       if (volume >= 0) {
-        newAudio.volume = volume / 10;
+        newAudio.volume = volume / 1000; // 0.01 т.к уши рвёт, ну его нафиг, потом сделаю более динамично...
       }
     } // Обработка ошибки
     catch (error) {
@@ -89,8 +89,10 @@ audio.play().catch(err => console.log(err));
 
 
   // Массив для цикличного возврата элементов
+  // Нужно переделать под объект с массивами объектов чтобы можно было динамично вставлять разные цикличные данные в Front-end
   const Links = [
     { text: 'Новая игра', params: 'new-game', route: "/nowell" },
+    { text: 'Быстрая загрузка', params: 'load-game', route: "/nowell", state: true },
     { text: 'Авторы', params: 'authors', route: "/credits" },
     { text: 'Настройки', params: 'options', route: "/settings" },
     { text: 'Новости VK', params: 'news', route: "/news" }
@@ -106,7 +108,7 @@ audio.play().catch(err => console.log(err));
           <div className="container menu__container">
             <nav className="menu-buttons">
               {Links.map(button => (
-                <Link key={button.params} onMouseEnter={() => handleMouseEnter(button.params)} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === button.params ? "is__active" : "not__active"}`} to={button.route}>{button.text}</Link>
+                <Link key={button.params} onMouseEnter={() => handleMouseEnter(button.params)} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === button.params ? "is__active" : "not__active"}`} to={button.route} state={{ loadSave: button.state }}>{button.text}</Link>
               ))}
             </nav>
           </div>

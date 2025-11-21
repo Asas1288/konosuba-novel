@@ -320,3 +320,16 @@ body {
   min-height: 100vh;
   background-color: black;
 }
+
+
+
+/*  */
+.settings__volume-slider {
+  height: 10px;
+  background: #5000FA;
+}
+
+.settings__volume-label {
+  font-size: 16px;
+  color: #666;
+}

@@ -7,7 +7,10 @@ export const SCENES = {
       {text: 'Помочь!', next: "new_branch"}
     ]}
    ],
+
    new_branch: [
     { character: 'Казума', text: 'Хорошо, помогу...'}
    ]
+
+   
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useReducer } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 // Импорт спрайтов
 import kazuma from "./styles/assets/sprites/kazuma.png";
@@ -17,9 +17,9 @@ const Nowell = () => {
 // Вынести в 1 ref невозможно, потому что каждый из них хранит своё значение, отчитываемое в секундах до исполнения кода в useEffect 
   const intervalRefTS = useRef(null);
   const intervalRefTA = useRef(null);
+  const location = useLocation(); // Для проверки загрузки
 
 
-  
 // Данными удобно управлять, но вызывает перерендер, нужно переделать под useReducer, В ПРОЦЕССЕ ИЗУЧЕНИЯ/ВЫПОЛНЕНИЯ
   const [game, setGame] = useState({
     curBranch: "start",
@@ -29,14 +29,43 @@ const Nowell = () => {
   });
 
 
-
-
-// Проверка текущейсцены
+// Проверка текущей сцены
   // Создание новой функции перебора сцен
 const currentScene = SCENES[game.curBranch][game.curSceneInx] || {
     character: "Конец",
     text: "История завершена!",
 };
+
+
+
+
+
+// Функция загрузки
+const loadSaveFunct = () => {
+  try {
+   const save = localStorage.getItem('saved-progress');
+   if (save) {
+    const saveData = JSON.parse(save);
+    if (saveData && typeof saveData == 'object') {
+      setGame((prev) => ({
+        curBranch: saveData.curBranch,
+        curSceneInx: saveData.curSceneInx,
+        autoPlayModeNTRD: false,
+        autoSkipModeNTRD: false
+      }));
+    }
+   }
+  }
+  catch (err) {
+    console.log(`Произошла ошибка: ${err}`); // В основном для дебага
+  }
+}
+
+
+// UseEffect для быстрой загрузки при вмонтировании
+useEffect(() => {
+ if (location.state.loadSave) loadSaveFunct();
+}, []);
 
 
 
@@ -198,9 +227,6 @@ const goToNextScene = () => {
     }
   };
 
-
-
-
 // Пока можно забыть про useReducer, он пока не нужен.
 // Работа с useReducer, практика и проба:
 
@@ -249,11 +275,13 @@ useEffect(() => {
   if (!currentScene.sound) return;
 
   let soundInstance;
-
+// Создаём функцию и передаём в неё soundName конкретной сцены.
   const loadSound = async (soundName) => {
+// Пробуем выполнить действие
   try {
   const curSceneSound = await import(`./styles/assets/sounds/${soundName}.mp3`);
-  
+
+// Создаём звук которому нужно проиграться в сцене
   soundInstance = new Audio(curSceneSound.default);
   soundInstance.volume = 0.01;
   await soundInstance.play();
@@ -278,6 +306,26 @@ return () => {
 
 
 
+// Функция сохранения прогресса, будем использовать в кнопочке
+const saveGame = () => {
+ localStorage.setItem('saved-progress', JSON.stringify(game));
+ alert('Игра сохранена!');
+};
+
+
+
+
+
+// Нужна функция для смены музыки на фоне, достаточно важная деталь, но сложная по реализации, пока не сегодня.
+// Можно реализовать просто смену музыки, но без её задержки и плавного входа, но пока учим дизайн XD.
+
+
+
+
+
+
+
+
   return (
     // novel-container --> onClick={goToNextScene}
     <div className="novel-container">
@@ -297,7 +345,7 @@ return () => {
       <div className="interface">
         <div className="choices">
           {currentScene.choices?.map(choice => (
-           <button key={choice.next} onClick={() => updateScenes(choice.next, choice.nextInx)} className={`choices__btn`}>{choice.text}</button>
+           <button key={choice.next} onClick={() => updateScenes(choice.next)} className={`choices__btn`}>{choice.text}</button>
           ))}
         </div>
         <div className="controls">
@@ -315,6 +363,9 @@ return () => {
           >
             {game.autoSkipModeNTRD ? "Стоп" : "Скип"}
           </button>
+          <button
+          onClick={saveGame}
+          className={`control-btn`}> Сохр. </button>
 
           <Link to="/main-menu" className="control-btn menu-btn">
             Меню
