@@ -10,6 +10,24 @@ import megumin from "./styles/assets/sprites/megumin.png";
 // Импорт сцен
 import { SCENES } from "./scenes";
 
+const ACTION_TYPES = {
+  NEXT_SCENE: 'NEXT_SCENE',
+  TOGGLE_AUTO_PLAY: 'TOGGLE_AUTO_PLAY',
+  TOGGLE_SKIP: 'TOGGLE_SKIP',
+  SET_NEW_BRANCH: 'SET_BRANCH',
+  ADD_HISTORY_LOG: 'ADD_HISTORY',
+  LOAD_GAME: 'LOAD_GAME',
+  CLEAR_MODES: 'CLEAR_MODES',
+}
+
+// Инициадизируем состояние 
+const initialState = { 
+  curBranch: "start",
+  curSceneInx: 0,
+  autoPlayMode: false, 
+  autoSkipMode: false,
+  history: [] 
+};
 
 
 const Nowell = () => {
@@ -19,25 +37,71 @@ const Nowell = () => {
   const intervalRefTA = useRef(null);
   const location = useLocation(); // Для проверки загрузки
 
+// АЛЛИЛУЯ БЛЯЬТ, 0:40 я заканчиваю работу... 
 
-// Данными удобно управлять, но вызывает перерендер, нужно переделать под useReducer, В ПРОЦЕССЕ ИЗУЧЕНИЯ/ВЫПОЛНЕНИЯ
-  const [game, setGame] = useState({
-    curBranch: "start",
-    curSceneInx: 0,
-    autoPlayModeNTRD: false, 
-    autoSkipModeNTRD: false // Я забыл что такое NTRD, но я пока не буду переписывать новое имя, для autoPlayMode/autoSkipMode и т.д, займёт время для переписи функций.
-  });
+// Настраиваем функцию диспатча...
+const gameReducer = (state, action) => {
+ switch (action.type) {
+  case ACTION_TYPES.NEXT_SCENE:
+    return {
+      ...state,
+      curSceneInx: state.curSceneInx + 1
+    };
+  case ACTION_TYPES.TOGGLE_AUTO_PLAY:
+    return {
+      ...state,
+      autoPlayMode: !state.autoPlayMode,
+      autoSkipMode: false // Отключаем авто-скип мод
+    }
+  case ACTION_TYPES.TOGGLE_SKIP:
+    return {
+      ...state,
+      autoSkipMode: !state.autoSkipMode,
+      autoPlayMode: false // Отключаем авто-плэй мод
+    };
+  case ACTION_TYPES.SET_NEW_BRANCH:
+    return {
+      ...state,
+      curSceneInx: 0,
+      curBranch: action.new_branch,
+      history: []
+    };
+  case ACTION_TYPES.ADD_HISTORY_LOG:
+    return {
+      ...state,
+      history: [...state.history, action.log_data]
+    };
+  case ACTION_TYPES.LOAD_GAME:
+    return {
+      ...state,
+      autoPlayMode: false,
+      autoSkipMode: false,
+      curSceneInx: action.index,
+      curBranch: action.branch,
+      history: []
+    };
+  case ACTION_TYPES.CLEAR_MODES:
+    return {
+      ...state,
+      autoPlayMode: false,
+      autoSkipMode: false
+    }
+  default:
+    return state;
+ }
+};
+
+// Настраиваем useReducer
+const [state, dispatch] = useReducer(gameReducer, initialState);
+
 
 
 // Проверка текущей сцены
   // Создание новой функции перебора сцен
-const currentScene = SCENES[game.curBranch][game.curSceneInx] || {
-    character: "Конец",
-    text: "История завершена!",
+const currentScene = SCENES[state.curBranch][state.curSceneInx] || {
+  character: "Конец",
+  text: "История завершена!"
 };
-
-
-
 
 
 // Функция загрузки
@@ -47,12 +111,11 @@ const loadSaveFunct = () => {
    if (save) {
     const saveData = JSON.parse(save);
     if (saveData && typeof saveData == 'object') {
-      setGame((prev) => ({
-        curBranch: saveData.curBranch,
-        curSceneInx: saveData.curSceneInx,
-        autoPlayModeNTRD: false,
-        autoSkipModeNTRD: false
-      }));
+      dispatch({
+        type: ACTION_TYPES.LOAD_GAME,
+        index: saveData.curSceneInx,
+        branch: saveData.curBranch
+      })
     }
    }
   }
@@ -68,43 +131,14 @@ useEffect(() => {
 }, []);
 
 
-
-// Функция перехода на другую сцену
-//   const goToNextScene = () => {
-//     if (game.curSceneInx < SCENES.length - 1) {
-//       setGame((prev) => ({
-//   ...prev,
-//   curSceneInx: prev.curSceneInx + 1
-//   })
-// );
-//     } else {
-//       setGame((prev) => ({
-//         ...prev,
-//         autoPlayModeNTRD: false,
-//         autoSkipModeNTRD: false
-//       }))
-//     }
-//   };
-
-
-
-
-
 // Новая функция перехода на другую сцену:
 const goToNextScene = () => {
-  if (game.curSceneInx < SCENES[game.curBranch].length - 1) {
-   setGame((prev) => ({
-    ...prev,
-    curSceneInx: prev.curSceneInx + 1
-   }));
+  if (state.curSceneInx < SCENES[state.curBranch].length - 1) {
+   dispatch({ type: ACTION_TYPES.NEXT_SCENE });
   } else {
-    setGame((prev) => ({
-      ...prev,
-      autoPlayModeNTRD: false,
-      autoSkipModeNTRD: false
-    }))
+   dispatch({ type: ACTION_TYPES.CLEAR_MODES });
   }
-}
+};
 
 
 
@@ -130,7 +164,7 @@ const goToNextScene = () => {
 
   // Авто-плей функция
   useEffect(() => {
-    if (game.autoPlayModeNTRD) {
+    if (state.autoPlayMode) {
       intervalRefTA.current = setInterval(() => {
         goToNextScene();
       }, 1500);
@@ -139,7 +173,7 @@ const goToNextScene = () => {
     }
 
     return () => clearInterval(intervalRefTA.current);
-  }, [game.autoPlayModeNTRD, game.curSceneInx]);
+  }, [state.autoPlayMode, state.curSceneInx]);
 
 
 
@@ -151,7 +185,7 @@ const goToNextScene = () => {
 
 // Функция авто-скипа
   useEffect(() => {
-    if (game.autoSkipModeNTRD) {
+    if (state.autoSkipMode) {
       intervalRefTS.current = setInterval(() => {
         goToNextScene();
       }, 200);
@@ -161,7 +195,7 @@ const goToNextScene = () => {
 
     // Функция очистки
     return () => clearInterval(intervalRefTS.current);
-  }, [game.autoSkipModeNTRD, game.curSceneInx]); // Замена на новые зависимости, небольшой рефакторинг
+  }, [state.autoSkipMode, state.curSceneInx]); // Замена на новые зависимости, небольшой рефакторинг
 
 
 
@@ -170,18 +204,9 @@ const goToNextScene = () => {
 
 // Авто-скип мод
   const handleSkip = () => {
-    if (game.autoSkipModeNTRD) {
-      setGame((prev) => ({
-        ...prev,
-        autoSkipModeNTRD: false
-      }))
-    } else {
-      setGame((prev) => ({
-        ...prev,
-        autoSkipModeNTRD: true,
-        autoPlayModeNTRD: false
-      }))
-    }
+    dispatch({
+      type: ACTION_TYPES.TOGGLE_SKIP
+    })
   };
 
 
@@ -189,18 +214,9 @@ const goToNextScene = () => {
 
 // Авто-плей мод
   const handleAutoPlay = () => {
-     if (game.autoPlayModeNTRD) {
-      setGame((prev) => ({
-        ...prev,
-        autoPlayModeNTRD: false
-      }))
-    } else {
-      setGame((prev) => ({
-        ...prev,
-        autoPlayModeNTRD: true,
-        autoSkipModeNTRD: false
-      }))
-    }
+   dispatch({
+    type: ACTION_TYPES.TOGGLE_AUTO_PLAY
+   })
   };
 
 
@@ -262,12 +278,12 @@ const CHARACTERS = [
 
 
 const updateScenes = (next_branch) => {
- setGame((prev) => ({
-  ...prev,
-  curBranch: next_branch,
-  curSceneInx: 0
- }))
-}
+ dispatch({
+  ...state,
+  type: ACTION_TYPES.SET_NEW_BRANCH,
+  new_branch: next_branch,
+ });
+};
 
 
 // Новый useEffect для звуков при смене сцены, рефактор потом, щас функция
@@ -301,28 +317,36 @@ return () => {
   }
 }
 
-}, [game.curSceneInx]);
+}, [state.curSceneInx]);
 
 
 
 
 // Функция сохранения прогресса, будем использовать в кнопочке
 const saveGame = () => {
- localStorage.setItem('saved-progress', JSON.stringify(game));
+ localStorage.setItem('saved-progress', JSON.stringify(state));
  alert('Игра сохранена!');
 };
 
 
+// Функция добавления сцены в историю
+const addHistoryLog = () => {
+ dispatch({
+  type: ACTION_TYPES.ADD_HISTORY_LOG, 
+  log_data: currentScene
+ });
+ console.log(state); // Чекаю данные, для работы
+};
 
+
+// useEffect для хранения истории:
+useEffect(() => {
+ addHistoryLog();
+}, [state.curSceneInx]);
 
 
 // Нужна функция для смены музыки на фоне, достаточно важная деталь, но сложная по реализации, пока не сегодня.
 // Можно реализовать просто смену музыки, но без её задержки и плавного входа, но пока учим дизайн XD.
-
-
-
-
-
 
 
 
@@ -352,16 +376,16 @@ const saveGame = () => {
           <button className={`control-btn`} onClick={goToNextScene}>Далее</button>
           <button
             onClick={handleAutoPlay}
-            className={`control-btn ${game.autoPlayModeNTRD ? "active" : ""}`}
+            className={`control-btn ${state.autoPlayMode ? "active" : ""}`}
           >
-            {game.autoPlayModeNTRD ? "Стоп" : "Авто"}
+            {state.autoPlayMode ? "Стоп" : "Авто"}
           </button>
 
           <button
             onClick={handleSkip}
-            className={`control-btn ${game.autoSkipModeNTRD ? "active" : ""}`}
+            className={`control-btn ${state.autoSkipMode ? "active" : ""}`}
           >
-            {game.autoSkipModeNTRD ? "Стоп" : "Скип"}
+            {state.autoSkipMode ? "Стоп" : "Скип"}
           </button>
           <button
           onClick={saveGame}

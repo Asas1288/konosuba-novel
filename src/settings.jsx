@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Settings = () => {
 // Хы-хы блять, зарефакторил)))
     const [volume, setVolume] = useState(() => {
-        const saved = localStorage.getItem('volume-opt')
+        const saved = localStorage.getItem('volume-opt');
         if (!saved) return 1;
         try {
             return JSON.parse(saved).volumeVal ?? 1;

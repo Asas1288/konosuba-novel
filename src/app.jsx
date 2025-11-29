@@ -26,7 +26,7 @@ function App() {
         <Route path="/main-menu" element={<MainMenu />} />
         <Route path="/nowell" element={<Nowell />} />
         <Route path="/credits" element={<Credits />} />
-        <Route path="/settings" element={<Settings />} /> 
+        <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<ExplosionComponent />} />
       </Routes>
     </BrowserRouter>

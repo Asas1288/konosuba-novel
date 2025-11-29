@@ -13,7 +13,7 @@ const ExplosionComponent = () => {
         <br />
       </h2>
       <p>Попробуйте вернуться в Столицу через телепорт:</p>
-      <Link className="back" to="/">
+      <Link className="back" to="/main-menu">
         Кастовать телепорт в Столицу. . .
       </Link>
     </div>

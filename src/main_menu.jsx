@@ -28,11 +28,15 @@ const MainMenu = () => {
     // Пробуем загрузить
     try {
       const savedVolume = localStorage.getItem('volume-opt');
+      if (savedVolume) {
       const volume = JSON.parse(savedVolume).volumeVal;
 
       if (volume >= 0) {
         newAudio.volume = volume / 1000; // 0.01 т.к уши рвёт, ну его нафиг, потом сделаю более динамично...
       }
+    } else {
+      newAudio.volume = 0.05;
+    }
     } // Обработка ошибки
     catch (error) {
       console.error('Ошибка воспроизведения:', error);
@@ -108,7 +112,7 @@ audio.play().catch(err => console.log(err));
           <div className="container menu__container">
             <nav className="menu-buttons">
               {Links.map(button => (
-                <Link key={button.params} onMouseEnter={() => handleMouseEnter(button.params)} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === button.params ? "is__active" : "not__active"}`} to={button.route} state={{ loadSave: button.state }}>{button.text}</Link>
+                <Link key={button.params} onMouseEnter={() => handleMouseEnter(button.params)} onMouseLeave={handleMouseLeave} className={`menu__btn ${activeButton === button.params ? "is__active" : "not__active"}`} to={button.route} state={{ loadSave: button.state }}><span className="menu__btn-text">{button.text}</span></Link>
               ))}
             </nav>
           </div>

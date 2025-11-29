@@ -12,5 +12,5 @@ export const SCENES = {
     { character: 'Казума', text: 'Хорошо, помогу...'}
    ]
 
-   
+
 };

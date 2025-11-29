@@ -72,7 +72,7 @@ body {
 
 /* Новый css */
 .menu {
-  background-image: url("assets/sprites/background_menu.png");
+  background-image: url("assets/sprites/menu_background--img.png");
   background-size: cover; /* добавить чтобы изображение заполнило фон */
 }
 .menu__container {
@@ -101,6 +101,9 @@ body {
   margin-bottom: 10px;
   /* Центрирование символов элемента */
   text-align: center;
+
+/* Анимации при смене класса */
+ transition: all 0.75s ease-out;
 }
 
 /* Пока необъязательно  */
@@ -137,29 +140,23 @@ body {
   align-items: center;
   gap: 20px;
 }
+
+
+
 /* Анимации кнопок */
 .is__active {
-  animation: slideIn 1s ease-out forwards;
+  transform: translateX(-10%);
+  color: white;
+  border: 1px solid white;
+  border-radius: 10px 40px;
+  text-shadow: -1px -1px 0 #000;
 }
-@keyframes slideIn {
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(-10%);
-  }
-}
+
 .not__active {
-  animation: slideInOut 1s ease-out forwards;
-}
-@keyframes slideInOut {
-  from {
-    transform: translateX(-10%);
-  }
-  to {
-    transform: translateX(0%);
-  }
-}
+  transform: translateX(0%);
+  color: black;
+  border: 1px solid black;
+} 
 
 /* Стили персонажей - сохранены ваши оригинальные цвета */
 .character-kazuma {
@@ -197,7 +194,7 @@ body {
 }
 
 .character-name {
-  padding: 5px 10px;
+  padding: 0.75vh 0.5vw;
   border-radius: 5px;
   font-weight: bold;
   font-size: 3vh;
