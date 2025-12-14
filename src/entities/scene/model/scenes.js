@@ -1,3 +1,12 @@
+const chr = {
+ kazuma: 'Казума',
+ aqua: 'Аква',
+ darkness: 'Даркнесс',
+ megumin: 'Мегумин',
+ unun: 'Юнь-Юнь',
+ wiz: 'Виз', 
+}
+
 export const SCENES = {
    start: [
     { character: 'Казума', text: 'Эй, Аква!'},

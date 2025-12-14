@@ -4,6 +4,7 @@
   color: white;
 } */
  
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: #f0f0f0;
@@ -68,11 +69,9 @@ body {
 
 
 
-
-
 /* Новый css */
 .menu {
-  background-image: url("assets/sprites/menu_background--img.png");
+  background-image: url("/src/shared/styles/assets/sprites/menu_background--img.png");
   background-size: cover; /* добавить чтобы изображение заполнило фон */
 }
 .menu__container {
@@ -320,7 +319,7 @@ body {
 
 
 
-/*  */
+/* Стили настроек */
 .settings__volume-slider {
   height: 10px;
   background: #5000FA;
@@ -329,4 +328,12 @@ body {
 .settings__volume-label {
   font-size: 16px;
   color: #666;
+}
+
+/* ХЫХЫХ 10 секунд css и нормальная композиция, нет, надо пол года сидеть и ныть, мне лень делать фронт-енд */
+.credits {
+  text-align: center;
+}
+li {
+  padding-bottom: 10px;
 }
