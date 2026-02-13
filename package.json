@@ -8,8 +8,7 @@
     "dev": "vite",
     "build": "node node_modules/vite/bin/vite.js build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
-    "postinstall": "chmod +x node_modules/.bin/vite"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "react": "^18.2.0",
